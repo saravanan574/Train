@@ -1,0 +1,134 @@
+<div id="register" ng-controller="regCtrl" class="form-wrapper">
+
+    <h1 class="display-6 text-center mb-4">Create Account</h1>
+
+    <form name="registerForm" id="registerForm" ng-submit="register()" novalidate>
+
+        <table class="">
+
+            <!-- Name -->
+            <tr>
+                <td class="label-col">Name</td>
+                <td class="input-col">
+                    <input type="text" 
+                           name="name"
+                           ng-model="user.name"
+                           required ng-pattern="/^[a-zA-Z ]+$/">
+
+                    <span class="text-danger"
+                          ng-show="registerForm.name.$touched && registerForm.name.$invalid">
+                        <span ng-show="registerForm.name.$error.required">Name is required</span>
+                        <span ng-show="registerForm.name.$error.pattern">Invalid name format</span>
+                    </span>
+                </td>
+            </tr>
+
+            <!-- Age -->
+            <tr>
+                <td class="label-col">Age</td>
+                <td class="input-col">
+                    <input type="number" class="form-control"
+                           name="age" ng-model="user.age"
+                           min="18" max="99" required>
+
+                    <span class="text-danger"
+                          ng-show="registerForm.age.$touched && registerForm.age.$invalid">
+                        <span ng-show="registerForm.age.$error.required">Age is required</span>
+                        <span ng-show="registerForm.age.$error.min || registerForm.age.$error.max">
+                            Age must be between 18 and 99
+                        </span>
+                    </span>
+                </td>
+            </tr>
+
+            <!-- Gender (updated) -->
+            <tr>
+                <td class="label-col">Gender</td>
+                <td class="input-col">
+                    <div class="radio-group">
+                        <label><input type="radio" ng-model="user.gender" name="gender" value="Male" required> Male</label>
+                        <label><input type="radio" ng-model="user.gender" name="gender" value="Female"> Female</label>
+                        <label><input type="radio" ng-model="user.gender" name="gender" value="Other"> Other</label>
+                    </div>
+
+                    <span class="text-danger"
+                          ng-show="registerForm.gender.$touched && registerForm.gender.$error.required">
+                        Please select gender
+                    </span>
+                </td>
+            </tr>
+
+            <!-- Email -->
+            <tr>
+                <td class="label-col">Email</td>
+                <td class="input-col">
+                    <input type="email" class="form-control"
+                           name="email"
+                           ng-model="user.email"
+                           required>
+
+                    <span class="text-danger"
+                          ng-show="registerForm.email.$touched && registerForm.email.$invalid">
+                        <span ng-show="registerForm.email.$error.required">Email is required</span>
+                        <span ng-show="registerForm.email.$error.email">Invalid email</span>
+                    </span>
+                </td>
+            </tr>
+
+            <!-- Phone -->
+            <tr>
+                <td class="label-col">Phone</td>
+                <td class="input-col">
+                    <input type="text" class="form-control"
+                           name="phoneno"
+                           ng-model="user.phoneno"
+                           ng-pattern="/^[6-9][0-9]{9}$/"
+                           required>
+
+                    <span class="text-danger"
+                          ng-show="registerForm.phoneno.$touched && registerForm.phoneno.$invalid">
+                        <span ng-show="registerForm.phoneno.$error.required">Phone number required</span>
+                        <span ng-show="registerForm.phoneno.$error.pattern">Invalid phone number</span>
+                    </span>
+                </td>
+            </tr>
+
+            <!-- Password -->
+            <tr>
+                <td class="label-col">Password</td>
+                <td class="input-col">
+                    <input type="password" class="form-control"
+                           name="password"
+                           ng-model="user.password"
+                           required ng-pattern="/^[A-Za-z0-9]{6,13}$/">
+
+                    <span class="text-danger"
+                          ng-show="registerForm.password.$touched && registerForm.password.$invalid">
+                        <span ng-show="registerForm.password.$error.required">Password required</span>
+                        <span ng-show="registerForm.password.$error.pattern">
+                            Password must be 6–13 characters
+                        </span>
+                    </span>
+                </td>
+            </tr>
+
+            <!-- Submit -->
+            <tr>
+                <td class="input-col text-center" colspan="2">
+                    <button type="submit" class="btn btn-primary mt-3 w-10"
+                            ng-disabled="registerForm.$invalid">
+                        Submit
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <h5 class="text-center mt-3 ">
+        Don't have an account? 
+        <button class="btn btn-gray large  register-link"
+                ng-click="goLogin()">
+            Login
+        </button>
+    </h5>
+</div>

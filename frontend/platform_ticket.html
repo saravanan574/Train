@@ -1,0 +1,31 @@
+<div id="platformTicketSection" class="container">
+    <h3>Booking Platform Ticket</h3>
+    <h4>1 Ticket is &#8377;10</h4>
+    <br>
+    <form id="ptForm" method="post" onsubmit="platform_ticket()">
+
+        <!-- Station Dropdown -->
+        <select name="stationName" id="stationName" class="d-block mb-4 mx-auto" required>
+            <option value="">Select Station</option>
+        </select>
+
+        <span id="stationError" class="text-danger  d-none">
+            Station selection is required.
+        </span>
+
+        <!-- Passenger Count -->
+        <input type="number"
+               name="passenger_count"
+               id="passenger_count"
+               class=" mb-5"
+               placeholder="Number of Tickets"
+               min="1"
+               required>
+
+        <span id="passengerError" class="text-danger d-none">
+            Minimum 1 ticket required.
+        </span><br>
+
+        <button type="submit" id="pt" class="btn btn-primary mt-2 d-block mx-auto" >Submit</button>
+    </form>
+</div>

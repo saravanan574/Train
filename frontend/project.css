@@ -1,0 +1,415 @@
+/* ===== GLOBAL ===== */
+body {
+    background-image: url("img/trainbg.jpeg");
+    background-attachment: fixed;
+    background-size: cover;
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: center;
+    overflow-x: hidden;
+    opacity: 0.92;
+}
+/* ===== HEADER BUTTONS ===== */
+#head {
+    position: sticky;
+    top:0px;
+    z-index: inherit;
+    width: 100%;
+    background-color: rgb(243, 161, 37);
+    padding: 6px 10px;
+}
+
+/* Buttons inside the header */
+#head button {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 0px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.header-btn img {
+    width: 28px;
+    height: 28px;
+}
+
+#head button:hover {
+    background-color: rgb(177, 150, 71);
+    color:white;
+    border:3px dotted red;
+    
+}
+
+
+/* ===== NAVIGATION BUTTONS ===== */
+#nav .icon {
+    background-color: white;
+    border: none;        /* Remove border */
+    border-radius: 12px;
+    max-width: 90%;
+    min-width:15%;
+    min-height: 20%;
+    max-height: 30%;
+    padding: 12px 15px;
+    margin: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.25s;
+}
+
+#nav .icon img {
+    width: 45px;
+    height: 45px;
+}
+#nav button{
+    min-width:min-content;
+    box-shadow:#0d6efd;
+    padding:6px;
+}
+#nav button:hover{
+    color: rgb(5, 5, 4);
+    background-color: rgb(238, 231, 210); 
+    border:1px dotted #0b5ed7;
+}
+
+/* Desktop layout: evenly spaced */
+@media (min-width: 768px) {
+    #nav .icon {
+        flex: 0 0 10%;
+    }
+}
+.form-wrapper {
+    width: 550px;
+    margin: 30px auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Table layout */
+.custom-form-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 18px; /* space between rows */
+}
+
+.label-col {
+    width: 140px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.input-col {
+    width: 100%;
+}
+
+/* Better spacing for form controls */
+.form-control {
+    padding: 8px 10px;
+    border-radius: 6px;
+}
+
+/* Radio button styling */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.radio-group input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+main {
+    background-color: rgba(54, 52, 52, 0.575);
+    color: white;
+    min-width: max-content;
+    width: 90%;            
+    max-width: 450px;      /* Prevents becoming too wide on big screens */
+    min-height: 250px;
+    height: auto;
+    margin: 50px auto;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.failed {
+    color:whitesmoke;
+    font-weight: bolder;
+    background-color: red;
+}
+
+.success {
+    color:whitesmoke;
+    background-color: rgb(30, 206, 68);
+}
+
+.register-link {
+    max-width: min-content;
+    max-height: min-content;
+    font-size: 1.4rem;
+    padding:3px;
+    text-decoration: none;
+    color: #0d6efd;   /* Bootstrap blue */
+}
+
+.register-link:hover {
+    border-color: green;
+    color: #f1f3f5;
+}
+
+.refresh{
+    background-color: rgba(236, 137, 7, 0.521);
+    color:white;
+}
+
+.refresh:hover{
+    background-color:rgba(238, 137, 5, 0.747);
+}
+/* ===== INPUT FIELDS ===== */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="date"],
+select {
+    width: 300px;             /* Fixed width for input/select fields */
+    height: 45px;             /* Consistent height */
+    border-radius: 10px;      /* Rounded corners */
+    border: 1px solid #ccc;   /* Light border */
+    padding: 8px 12px;        /* Internal spacing */
+    margin: 8px 0;            /* Vertical spacing */
+    font-size: 16px;
+    outline: none;
+    transition: 0.25s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+select:focus {
+    color:rgb(14, 13, 13);
+    box-shadow: 2 2 5px rgba(13, 110, 253, 0.5); /* subtle glow */
+}
+
+/* ===== COMMON FORM CONTAINER ===== */
+.form-box {
+    background: rgba(255, 255, 255, 0.95);
+    width: 95%;
+    max-width: 550px;
+    margin: 80px auto;
+    padding: 35px 40px;
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Form title */
+.form-box h1, .form-box h2 {
+    font-weight: 700;
+    color: #222;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+table{
+    border-radius: 5px;
+    border-collapse: separate;
+    width:100%;
+    border-spacing: 0 12px;    
+    text-transform: uppercase;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: left;
+    font-weight:900;
+}
+
+table:hover{
+    box-shadow: 2 2 400px red;
+}
+
+form table tr{
+    background: none !important;
+}
+#view tr{
+    width: 100%;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    color:whitesmoke;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+#train table,#platform table{
+    background-color: rgba(94, 93, 93, 0.342);
+    box-shadow: 0 0 10px gray;
+    padding:5px;
+}
+
+
+tr{
+    margin-bottom: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+}
+
+td:nth-child(2){
+    padding-left:100px;
+}
+
+@media (max-width: 700px) {
+    table, tbody, tr, th, td {
+        display: block;
+        width: 100%;
+    }
+
+    tr {
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+        font-weight: bold;
+        background: none;
+        padding-bottom: 5px;
+    }
+
+    td {
+        text-align: left;
+        padding-left: 5px;
+    }
+}
+
+.weight{
+    background-color: whitesmoke;
+}
+/* ---------- Button Styling ---------- */
+button {
+    width: 30%;
+    padding: 12px;
+    margin:2px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    background-color: #0d6efd;
+    color: black;
+    cursor: pointer;
+    transition:.2s ease;
+}
+
+button:hover {
+    background-color: skyblue;
+}
+
+/* ---------- Link under form ---------- */
+p {
+    text-align: center;
+    font-size: large;
+    margin-top: 15px;
+    color:#0da5fd;
+}
+
+span{
+    color:red;
+    text-align: left;
+}
+
+a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.inform{
+    color:wheat;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+/* ===== FOOTER ===== */
+footer {
+    position:fixed;
+    bottom:0%;
+    left:1%;
+    width: 100%;
+    align-items: center;
+    padding: 1px 0px;
+    margin-bottom:-10px;
+    background-color: rgb(243, 171, 37);
+    font-weight: bolder;
+    border-radius: 10px 10px 0 0;
+}
+
+
+li{
+    text-align: left;
+    padding:2px 5px;
+    font-size: larger;
+}
+
+li:nth-child(odd){
+    color:#c3e722;
+}
+
+li:nth-child(even){
+    color:chartreuse
+}
+
+
+footer p,
+footer a {
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+
+
+/* Other text styles */
+h1 {
+    color: white;
+    font-weight: bold;
+}
+
+input {
+    width: 250px;
+    height: 45px;
+    border-radius: 10px;
+    border: none;
+    margin: 5px;
+    padding: 8px;
+}
+
+hr {
+    border: 2px solid white;
+}

@@ -1,0 +1,19 @@
+<div id="cancelPlatformSection" class="container">
+
+    <h3>Cancel Platform Ticket</h3>
+    <p class ="inform">Enter Ticket Number <br>(Check it in the Booking History)</p>
+
+    <form id="cptForm" name="cptForm" onsubmit = "platform_cancel()" novalidate >
+
+        <input type="text" name="ticket_id" class = "mb-3" class="d-block" placeholder="Ticket Id" id="ticket_id" required><br>
+        <span id = "failed" style="background:skyblue"></span>
+
+        <br>
+
+        <button type="submit"
+                id="cptSubmitBtn">
+            Submit
+        </button>
+    </form>
+
+</div>

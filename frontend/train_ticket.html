@@ -1,0 +1,120 @@
+<div id="trainTicketSection"  ng-controller="train_ticket">
+
+    <div id="tt" class="container mt-3">
+
+        <h3>Train Ticket Booking</h3>
+        <p class = "faield" ng-if = "message">{{message}}</p>
+        <h4 id="sp">Update the source and destination</h4>
+        <br>
+        <form id="ttForm" name="ttForm" ng-submit="ticket_booking()" novalidate>
+
+            <table cell-padding="2" cell-spacing="4">
+
+                <tr>
+                    <td>Source Station</td>
+                    <td>
+                        <select id="sstation" name="sstation" ng-model="sstation" ng-placeholder="Select source"  class="form-select" >
+                        </select>
+                        
+
+                        <span class="text-danger "
+                              ng-show="ttForm.sstation.$touched && ttForm.sstation.$invalid">
+                            Source station required
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Destination Station</td>
+                    <td>
+                        <select id="dstation"
+                                name="dstation"
+                                ng-model="dstation"
+                                class="form-select"
+                                >
+                        </select>
+
+                        <span class="text-danger"
+                              ng-show="ttForm.dstation.$touched && ttForm.dstation.$invalid">
+                            Destination station required
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Journey Date</td>
+                    <td>
+                        <input type="date"
+                               id="date"
+                               name="date"
+                               ng-model="date"
+                               class = "form-control"
+                               onclick = "setToday('date')"
+                               >
+
+                        <span class="text-danger"
+                              ng-show="ttForm.date.$touched && ttForm.date.$invalid">
+                            Journey date required
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>No. of Passengers</td>
+                    <td>
+                        <input type="number"
+                               id="tnop"
+                               name="tnop"
+                               ng-model="tnop"
+                               class="form-control"
+                               min="1"
+                               required>
+
+                        <span class="text-danger"
+                              ng-show="ttForm.tnop.$touched && ttForm.tnop.$invalid">
+                            Enter valid passenger count
+                        </span>
+                    </td>
+                </tr>
+
+                <tr id="amount"></tr>
+
+                <tr>
+                    <td>Phone Number</td>
+                    <td>
+                        <input type="text"
+                               id="phoneno"
+                               name="tphoneno"
+                               ng-model="tphoneno"
+                               class="form-control"
+                               ng-pattern="/^[6-9]\d{9}$/"
+                               required>
+
+                        <span class="text-danger" 
+                              ng-show="ttForm.tphoneno.$touched && ttForm.tphoneno.$invalid">
+                            <span ng-show="ttForm.tphoneno.$error.pattern">Invalid phone number</span>
+                            <span ng-show="ttForm.tphoneno.$error.required">Phone number required</span>
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-primary w-100" ng-disabled="ttForm.$invalid">
+                            Submit
+                        </button>
+                    </td>
+                    <td>
+                        <button id="treset" type="reset" class="btn btn-secondary">
+                            Reset
+                        </button>
+                    </td>
+                </tr>
+
+            </table>
+
+        </form>
+
+    </div>
+
+</div>
