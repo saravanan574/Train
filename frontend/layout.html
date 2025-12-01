@@ -24,19 +24,16 @@
 
                 <div id="profile" class="col-4 col-md-3 d-flex justify-content-end">
 
-                    <!-- Profile visible ONLY after login -->
                     <button class="header-btn me-3 loggedIn" onclick="openPage('/profile')" title="Profile">
-                        <img src="img/profile.png" alt="Profile">
+                        <img src="img/profile.png" alt="User Profile Icon">
                     </button>
 
-                    <!-- Logout visible ONLY after login -->
                     <button class="header-btn me-3 loggedIn" onclick="openPage('/logout')" title="Logout">
-                        <img src="img/logout.jpeg" alt="Logout">
+                        <img src="img/logout.jpeg" alt="Logout Icon">
                     </button>
 
-                    <!-- Always visible -->
                     <button class="header-btn" onclick="openPage('/about')" title="About">
-                        <img src="img/info.png" alt="About">
+                        <img src="img/info.png" alt="Information Icon">
                     </button>
                 </div>
 
@@ -45,46 +42,38 @@
 
 
         <nav id="nav" class="container-fluid row justify-content-around">
-            <!-- Always visible -->
+
             <button class="icon col-3 col-md-1" onclick="openPage('/home')">
-                <img src="img/home.png"><br>Home
+                <img src="img/home.png" alt="Home Icon"><br>Home
             </button>
 
-            <!-- Login visible only when NOT logged in -->
             <button class="icon col-3 col-md-1 loggedOut" onclick="openPage('/login')">
-                <img src="img/login.webp"><br>Login
+                <img src="img/login.webp" alt="Login Icon"><br>Login
             </button>
 
             <button class="icon col-3 col-md-1 loggedOut" onclick="openPage('/register')">
-                <img src="img/login.webp"><br>Register
+                <img src="img/login.webp" alt="Register Icon"><br>Register
             </button>
 
-            <!-- Visible only AFTER login -->
             <button class="icon col-3 col-md-1 loggedIn" onclick="openPage('/train-ticket')">
-                <img src="img/platform.png"><br>Train Ticket
+                <img src="img/platform.png" alt="Train Ticket Icon"><br>Train Ticket
             </button>
 
             <button class="icon col-3 col-md-1 loggedIn" onclick="openPage('/platform-ticket')">
-                <img src="img/trainticket.png"><br>Platform Ticket
+                <img src="img/trainticket.png" alt="Platform Ticket Icon"><br>Platform Ticket
             </button>
 
             <button class="icon col-3 col-md-1 loggedIn" onclick="openPage('/ticket-cancel')">
-                <img src="img/platform.png"> ✖️<br>Cancel Train Ticket
+                <img src="img/platform.png" alt="Cancel Train Ticket Icon"> ✖️<br>Cancel Train Ticket
             </button>
 
             <button class="icon col-3 col-md-1 loggedIn" onclick="openPage('/platform-ticket-cancel')">
-                <img src="img/canceltrain.png"><br>Cancel Platform Ticket
+                <img src="img/canceltrain.png" alt="Cancel Platform Ticket Icon"><br>Cancel Platform Ticket
             </button>
 
             <button class="icon col-3 col-md-1 loggedIn" onclick="openPage('/booking-history')">
-                <img src="img/history.png"><br>Booking History
+                <img src="img/history.png" alt="History Icon"><br>Booking History
             </button>
-
-            <!-- Always visible -->
-            <!-- <button class="icon col-3 col-md-1" onclick="openPage('/about')">
-                <img src="img/info.png"><br>About
-            </button> -->
-
         </nav>
 
 
@@ -92,11 +81,11 @@
 
 
         <footer id="foot" class="container-fluid row justify-content-around">
-            <p class="col-3 "><i>Helpline :</i> 0562-242-0111</p>        
-            <p class="col-3 "><i>Feedback :</i> 
+            <p class="col-3"><i>Helpline :</i> 0562-242-0111</p>        
+            <p class="col-3"><i>Feedback :</i> 
                 <a href="mailto:utsonmobile@cris.org.in?subject=Feedback&body= Report your issue.">Send Mail</a>
             </p>
-            <p class="col-6 "><i>Contact us :</i> (Monday to Sunday) 24/7 at care@uts.co.in.</p>
+            <p class="col-6"><i>Contact us :</i> (Monday to Sunday) 24/7 at care@uts.co.in.</p>
         </footer>
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -104,5 +93,5 @@
         <script src="main.js"></script>
         <script src="project.js"></script>
 
-</body>
+    </body>
 </html>
