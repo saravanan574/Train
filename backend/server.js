@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(cors({
-  origin:"http://localhost:3000",credentials:true
+  origin:true,credentials:true
 }));
 
 
@@ -44,10 +44,13 @@ app.use(
   })
 );
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log("MongoDB Error:", err));
-
+  .catch((err) => console.log("MongoDB Error:", err));
 
 // REGISTER USER
 app.post("/register", async (req, res) => {
@@ -77,9 +80,6 @@ app.post("/register", async (req, res) => {
     console.log(newUser);
     await newUser.save();
 
-    // Optional: write to files
-    fs.writeFile("User.json", JSON.stringify(newUser), () => {});
-    fs.writeFile("n.txt", "1", () => {});
 
     console.log(`${newUser.name} registered successfully`);
 
@@ -129,9 +129,12 @@ app.post("/login", async (req, res) => {
     process.env.ACCESS_TOKEN_SECRET,
     {expiresIn:"1d"}
   )
-  res.cookie("token",token,{
-    httpOnly:true,secure:false,samesite:"lax"
-  })
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+});
+
   res.cookie("user")
   console.log(`${z.name} logged in successfully`);
 
@@ -275,6 +278,7 @@ app.post("/cancel-platform",verifyToken, async (req, res) => {
 
 // MAIN PAGE → load layout, then load login page inside it
 app.get(/.*/, (req, res) => {
+  console.log("FAS");
   res.sendFile(path.join(frontend, "layout.html"));
 });
 
