@@ -62,7 +62,7 @@ handleLogged();
 const handleRoute = async() => {
     let page = window.location.pathname;
     let route;
-    const res = await fetch("http://localhost:3000/logverify", { method:"GET",credentials: "include" });
+    const res = await fetch("/logverify", { method:"GET",credentials: "include" });
     const data = await res.json();
     if (data.message && (page === "/login" || page === "/register")) {
         window.history.pushState({}, "", "/home");
