@@ -278,7 +278,6 @@ app.post("/cancel-platform",verifyToken, async (req, res) => {
 
 // MAIN PAGE → load layout, then load login page inside it
 app.get(/.*/, (req, res) => {
-  console.log("FAS");
   res.sendFile(path.join(frontend, "layout.html"));
 });
 
