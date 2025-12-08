@@ -34,7 +34,7 @@
                                 >
                         </select>
 
-                        <span class="text-danger"
+                        <span
                               ng-show="ttForm.dstation.$touched && ttForm.dstation.$invalid">
                             Destination station required
                         </span>
@@ -52,7 +52,7 @@
                                onclick = "setToday('date')"
                                >
 
-                        <span class="text-danger"
+                        <span
                               ng-show="ttForm.date.$touched && ttForm.date.$invalid">
                             Journey date required
                         </span>
@@ -68,11 +68,20 @@
                                ng-model="tnop"
                                class="form-control"
                                min="1"
+                               max="5"
                                required>
 
-                        <span class="text-danger"
-                              ng-show="ttForm.tnop.$touched && ttForm.tnop.$invalid">
+                        <span
+                              ng-show="ttForm.tnop.$touched && ttForm.tnop.$error.required">
                             Enter valid passenger count
+                        </span>
+                        <span
+                              ng-show="ttForm.tnop.$touched && ttForm.tnop.$error.min">
+                            Minimum 1 ticket required
+                        </span>
+                        <span
+                              ng-show="ttForm.tnop.$touched && ttForm.tnop.$error.max">
+                            Maximum 5 ticket only
                         </span>
                     </td>
                 </tr>
@@ -90,7 +99,7 @@
                                ng-pattern="/^[6-9]\d{9}$/"
                                required>
 
-                        <span class="text-danger" 
+                        <span 
                               ng-show="ttForm.tphoneno.$touched && ttForm.tphoneno.$invalid">
                             <span ng-show="ttForm.tphoneno.$error.pattern">Invalid phone number</span>
                             <span ng-show="ttForm.tphoneno.$error.required">Phone number required</span>
@@ -105,12 +114,11 @@
                         </button>
                     </td>
                     <td>
-                        <button id="treset" type="reset" class="btn btn-secondary">
+                        <button id="treset" type="reset" class="btn btn-secondary w-100">
                             Reset
                         </button>
                     </td>
                 </tr>
-
             </table>
 
         </form>

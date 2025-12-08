@@ -1,16 +1,13 @@
 import express from "express";
-import bp from "body-parser";
-import fs from "fs";
 import path from "path";
 import {fileURLToPath} from "url";
-import events from "events";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import cors from "cors";
-import tok from "./jwt/token.js"
 import dotenv from "dotenv";
+import bcrypt from "bcrypt"
 import {User,Ticket,Platform} from "./models/model.js"
 dotenv.config();
 
@@ -65,7 +62,8 @@ app.post("/register", async (req, res) => {
 
     // Generate registration number
     const regNo = Math.round(Date.now() * 100000);
-
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(rpass,salt);
     // Create new user
     const newUser = new User({
       regNo,
@@ -75,12 +73,9 @@ app.post("/register", async (req, res) => {
       createdAt: new Date(),
       emailId: rmail,
       phoneNo: phoneno,
-      password: rpass
+      password
     });
-    console.log(newUser);
     await newUser.save();
-
-
     console.log(`${newUser.name} registered successfully`);
 
     // Send JSON response for SPA
@@ -96,7 +91,7 @@ app.post("/register", async (req, res) => {
 //Check login or not
 app.get("/logverify",async(req,res) => {
   const token = req.cookies.token;
-  if(!token) res.status(401).json({message:false,status:"failed"});
+  if(!token) res.status(200).json({message:false,status:"failed"});
   else {
     const verify = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);
     res.status(200).json({message:true,status :"success",auth:{id:verify.userId,token}});
@@ -119,26 +114,27 @@ const verifyToken = (req,res,next) => {
 
 // Login route
 app.post("/login", async (req, res) => {
-  let z = await User.findOne({
-    phoneNo: req.body.log_phone,
-    password: req.body.log_pw,
-  },{password:0});
-  if (!z) return res.status(401).json({message:"User not found",status:"failed"});
+  let phone = req.body.log_phone;
+  let password = req.body.log_pw;
+  const user = await User.findOne({ phoneNo:phone });
+  console.log
+  if (!user) return res.status(400).json({ message: "User not found" });
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) return res.status(400).json({ message: "Invalid password" });
   const token = jwt.sign(
-    {userId:z.regNo},
+    {userId:user.regNo}, 
     process.env.ACCESS_TOKEN_SECRET,
     {expiresIn:"1d"}
   )
   res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none"
-});
+    httpOnly: true,
+    secure: true,
+    sameSite: "none"
+  });
+  console.log(`${user.name} logged in successfully`);
 
-  res.cookie("user")
-  console.log(`${z.name} logged in successfully`);
-
-  res.status(200).json({message:"User is found",status:"success",userId:z.regNo,token});
+  res.status(200).json({message:"User is found",status:"success",userId:user.regNo,token});
 });
 
 
@@ -200,6 +196,7 @@ app.post("/booktrain", verifyToken,async (req, res) => {
       destination: destination,
       journeyDate: journey,
       passengerCount: passenger,
+      bookedAt:new Date(),
       price: price,
       phoneNo: phone,
       status: "Booked",
@@ -214,26 +211,11 @@ app.post("/booktrain", verifyToken,async (req, res) => {
     res.status(500).json({message:"Internal Server Error",status:"failed"});
   }
 });
-
-
-app.get("/ticket-history", verifyToken,async(req,res) => {
-  let today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  // Train tickets with future journey date
-  let ticket_data = await Ticket.find({
-      userId: req.userId,
-      journeyDate: { $gt: today }
-  }).sort({ _id: -1 });
-
-  // Platform ticket (if you also have a date field)
-  let platform_data = await Platform.find({
-      userId: req.userId
-  }).sort({ _id: -1 });
-    if(!ticket_data || !platform_data) res.status(401).json({message:"User id is not found",status:"failed"});
-    res.status(200).json({message:true,status :"success",ticket_data,platform_data});
-});
-
+const getIST = () => {
+  const date = new Date();
+  const offset = 5.5*60*60*1000;
+  return new Date(date+offset);
+}
 // BOOK PLATFORM TICKET
 app.post("/booking_platform",verifyToken, async(req, res) => {
   try{
@@ -244,6 +226,7 @@ app.post("/booking_platform",verifyToken, async(req, res) => {
       station: req.body.stationName.toUpperCase(),
       passengerCount: req.body.passenger_count,
       price: parseInt(req.body.amount),
+      bookedAt:getIST(),
       status: "Booked",
     });
     await p.save();
@@ -253,9 +236,29 @@ app.post("/booking_platform",verifyToken, async(req, res) => {
   }
   });
 
+app.get("/ticket-history", verifyToken,async(req,res) => {
+  let today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Train tickets with future journey date
+  let ticket_data = await Ticket.find({
+      userId: req.userId,
+      journeyDate: { $gt: today-1 }
+  }).sort({ _id: -1 });
+
+  // Platform ticket (if you also have a date field)
+  let platform_data = await Platform.find({
+      userId: req.userId
+  }).sort({ _id: -1 });
+    if(!ticket_data || !platform_data) res.status(401).json({message:"User id is not found",status:"failed"});
+    res.status(200).json({message:true,status :"success",ticket_data,platform_data});
+});
+
+
+
 
 // CANCEL TRAIN
-app.post("/cancel-ticket",verifyToken, async(req, res) => {
+app.patch("/cancel-ticket",verifyToken, async(req, res) => {
   let d = await Ticket.updateOne(
     { ticketNo: req.body.id, status: "Booked",userId:req.userId },
     { status: "Cancelled" }
@@ -266,7 +269,7 @@ app.post("/cancel-ticket",verifyToken, async(req, res) => {
 });
 
 // CANCEL PLATFORM
-app.post("/cancel-platform",verifyToken, async (req, res) => {
+app.patch("/cancel-platform",verifyToken, async (req, res) => {
   let d = await Platform.updateOne(
     { ticketNo: req.body.id, status: "Booked" ,userId:req.userId},
     { status: "Cancelled" }
@@ -275,6 +278,23 @@ app.post("/cancel-platform",verifyToken, async (req, res) => {
   if (!d.matchedCount) return res.status(401).json({message:"Platform Ticket id is not found or already cancelled Please check it",status:"failed"});
   res.status(200).json({message:"Platform Ticket is cancelled successfully",status:"success"});
 });
+
+app.delete("/delete-ticket/:id",verifyToken,async(req,res) => {
+  const id = req.params.id;
+  const type = req.query.type;
+  let data;
+  if(type == "train"){
+    data = await Ticket.deleteOne({userId:req.userId,ticketNo:id});
+  }
+  else if(type == "platform"){
+    data = await Platform.deleteOne({userId:req.userId,ticketNo:id});
+  }
+  else{
+    return res.status(400).json({message:"Ticket type is not defined ",status:"Failed"});
+  }
+  if(!data) return res.status(401).json({message:" Ticket id is not found or already cancelled\nPlease check it",status:"failed"});
+  res.status(200).json({message:"Ticket is deleted successfully",status:"success"});
+})
 
 // MAIN PAGE → load layout, then load login page inside it
 app.get(/.*/, (req, res) => {

@@ -21,6 +21,7 @@ const ticketSchema = new mongoose.Schema({
     journeyDate: { type: Date, required: true },
     passengerCount: { type: String, required: true },
     price: { type: Number, required: true },
+    bookedAt: { type: Date, required: true },
     phoneNo: { type: String, required: true },
     status: { type: String, required: true },
 });
@@ -32,6 +33,7 @@ const platformSchema = new mongoose.Schema({
     station: { type: String, required: true },
     passengerCount: { type: String, required: true },
     price: { type: Number, required: true },
+    bookedAt: { type: Date, required: true },
     status: { type: String, required: true },
 });
 

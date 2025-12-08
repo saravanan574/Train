@@ -1,6 +1,6 @@
 <div class="containerr" ng-controller = "logCtrl">
     <h1 class="display-6 text-center mb-4">Log in</h1>
-    <div class="text-center mt-3 failed" ng-if="message">{{message}}</div>
+    <span class="text-center p-0" id="message"></span>
     <br>
     <form name="loginForm" ng-submit="login()" novalidate>
         <!-- Phone Number -->

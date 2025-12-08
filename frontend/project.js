@@ -70,7 +70,7 @@ function calculatePrice() {
     document.getElementById("sp").innerHTML = `1 Ticket is ₹${pricePerTicket}`;
 
     const amo = document.getElementById("amount");
-    amo.innerHTML = "";
+    amo.style.display = "none";
 
     const td1 = document.createElement("td");
 
@@ -156,9 +156,7 @@ app.controller("regCtrl", function($scope, $http){
         const regDiv = document.getElementById("main");
 
         if (!validName(name) || !validPhone(phone) || !validPass(password) || !gender || !age || !email) {
-            regDiv.innerHTML = `
-                <h3 class = "failed">Given data is wrong<br>Please Register again</h3>
-            `;
+            showCopyMessage("Given data is wrong\nPlease Register again","failed");
             return;
         }
 
@@ -178,11 +176,11 @@ app.controller("regCtrl", function($scope, $http){
             });
 
             if (response.ok) {
-                regDiv.innerHTML = "<h3 class = 'success'>Registration successful! Redirecting...<br>Please wait..</h3>";
+                showCopyMessage("Registration successful!\nPlease wait..","success");
                 setTimeout(() => window.location.href = '/login', 1500);
             } else {
                 const result = await response.text();
-                regDiv.innerHTML = `<h3 class = 'failed'>Registration failed: ${result.message}</h3>`;
+                showCopyMessage("Registration failed: "+result.message,"failed");
                 setTimeout(() =>window.location.href = '/register', 3500);
             }
         } catch(err) {
@@ -196,7 +194,7 @@ app.controller("regCtrl", function($scope, $http){
 app.controller("logCtrl", function ($scope) {
 
     $scope.user = {};
-    const mainDiv = document.getElementById("main");
+    const mainDiv = document.getElementById("message");
 
     // Redirect to register page
     $scope.goRegister = function () {
@@ -204,22 +202,25 @@ app.controller("logCtrl", function ($scope) {
     };
 
     // LOGIN FUNCTION
+    
     $scope.login = async function () {
 
         const phone = ($scope.user.log_phone || "").trim();
         const password = ($scope.user.log_pw || "").trim();
         if (!phone) {
-            $scope.message = "Phone number is required";
+            message.innerHTML = "Phone number is required";
             return;
         }
 
         if (phone.length !== 10 || isNaN(phone)) {
-            $scope.message = "Enter a valid 10-digit phone number";
+            message.innerHTML = "Enter a valid 10-digit phone number";
+            setTimeout(() =>message.style.display = "none",5000);
             return;
         }
 
         if (!password) {
-            $scope.message = "Password is required";
+            message.innerHTML = "Password is required";
+            setTimeout(() =>message.style.display = "none",5000);
             return;
         }
 
@@ -237,122 +238,127 @@ app.controller("logCtrl", function ($scope) {
                 localStorage.setItem("token", result.token);
 
                 // Show success message
-                mainDiv.innerHTML = `
-                    <h3 class="success" style="text-align:center;">
-                        Login successful! Redirecting to your account...<br>
-                        Please wait...
-                    </h3>
-                `;
-
-                setTimeout(() => window.location.href = "/home", 1000);
+                showCopyMessage(result.message,"success");
+                window.location.href = "/home";
 
             } else {
-                $scope.$applyAsync(() => {
-                    $scope.message = result.message || "Incorrect phone number or password";
-                });
+                message.innerHTML = result.message || "Incorrect phone number or password";
+                setTimeout(() =>message.style.display = "none",5000);
             }
-
+            
         } catch (err) {
-            $scope.$applyAsync(() => {
-                $scope.message = "Server error. Please try again later.";
-            });
+            message.innerHTML = "Server error. Please try again later.";
+            setTimeout(() =>message.style.display = "none",5000);
+
         }
+        
     };
 });
 
+function showCopyMessage(msg, type) {
+    const box = document.getElementById("copyMsg");
 
-        app.controller("train_ticket", ($scope, $http) => {
+    box.innerText = msg;
 
-            $scope.ticket_booking = async () => {
-        
-                const mainDiv = document.getElementById("main");
-        
-                // Read values safely
-                const ss = ($scope.sstation || document.getElementById("sstation").value || "").trim();
-                const ds = ($scope.dstation || document.getElementById("dstation").value || "").trim();
-                const tnop = $scope.tnop;
-                const price = (document.getElementById("price").value || "").trim();
-                const phoneno = ($scope.tphoneno || "").trim();
-                const date = $scope.date;
-        
-                // ------------------------------
-                // === VALIDATION SECTION ===
-                // ------------------------------
-                if (!ss) return alert("Source station is required");
-                if (!ds) return alert("Destination station is required");
-                if (!tnop || isNaN(tnop) || tnop <= 0) return alert("Enter valid number of passengers");
-                if (!price || isNaN(price) || price <= 0) return alert("Price is missing or invalid");
-                if (!phoneno || phoneno.length !== 10) return alert("Enter a valid 10-digit phone number");
-                if (!date) return alert("Please select a journey date");
-        
-                const token = localStorage.getItem("token");
-                const logid = localStorage.getItem("logid");
-        
-                if (!token) return alert("User not authenticated. Please login again.");
-                if (!logid) return alert("Invalid user ID. Login again.");
-        
-                // Confirm payment
-                const confirmPay = confirm("Pay the amount " + price + " rupees?");
-                if (!confirmPay) {
-                    alert("Payment cancelled");
-                    setTimeout(() =>window.location.href = '/train-ticket', 1500);
-                    return;
-                }
-        
-                const pay = parseInt(prompt("Pay the amount: " + price + " rupees"));
-                if (pay !== parseInt(price)) {
-                    alert("Insufficient amount. Payment failed.");
-                    return;
-                }
-        
-                // Payload
-                const payload = {
-                    logid: logid,
-                    source: ss,
-                    destination: ds,
-                    passengers: tnop,
-                    amount: price,
-                    phoneno: phoneno,
-                    date: date
-                };
-        
-                // ------------------------------
-                // === API CALL SECTION ===
-                // ------------------------------
-                try {
-                    const res = await fetch("/booktrain", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": "Bearer " + token
-                        },
-                        body: JSON.stringify(payload)
-                    });
-        
-                    const result = await res.json();
-        
-                    if (res.ok) {
-                        mainDiv.innerHTML = `
-                            <h3 class="success">
-                                Ticket booked successfully! Redirecting to Booking History...<br>
-                                Please wait...
-                            </h3>
-                        `;
-                        setTimeout(() => window.location.href = "/booking-history", 1500);
-                    } else {
-                        mainDiv.innerHTML = `
-                            <h3 class="failure">
-                                Booking Failed: ${result.message || "Unknown error"}
-                            </h3>
-                        `;
-                        setTimeout(() =>window.location.href = '/train-ticket', 3500);
-                    }
-        
-                } catch (err) {
-                    console.error("Ticket booking error:", err);
-                    mainDiv.innerHTML = `<h3 class="failure">Server Error! Try again later.</h3>`;
-                    setTimeout(() =>window.location.href = '/train-ticket', 1500);                }
-            };
-        });
-                    
+    if (type === "success") {
+        box.style.background = "#d4edda";
+        box.style.color = "#155724";
+        box.style.border = "1px solid #c3e6cb";
+    } else {
+        box.style.background = "#f8d7da";
+        box.style.color = "#721c24";
+        box.style.border = "1px solid #f5c6cb";
+    }
+
+    box.style.display = "block";
+
+    // Hide after 2 seconds
+    setTimeout(() => {
+        box.style.display = "none";
+    }, 2000);
+}
+
+app.controller("train_ticket", ($scope, $http, $timeout) => {
+
+    // message variables
+    $scope.message = "";
+
+
+    $scope.ticket_booking = async () => {
+
+        const mainDiv = document.getElementById("main");
+
+        const ss = ($scope.sstation || document.getElementById("sstation").value || "").trim();
+        const ds = ($scope.dstation || document.getElementById("dstation").value || "").trim();
+        const tnop = $scope.tnop;
+        const price = (document.getElementById("price").value || "").trim();
+        const phoneno = ($scope.tphoneno || "").trim();
+        const date = $scope.date;
+
+        // VALIDATION  
+        if (!ss) return $scope.message = "Source station is required";
+        if (!ds) return $scope.message = "Destination station is required";
+        if (!tnop || isNaN(tnop) || tnop <= 0) return $scope.message = "Enter valid number of passengers";
+        if (!price || isNaN(price) || price <= 0) return $scope.message = "Price is missing or invalid";
+        if (!phoneno || phoneno.length !== 10) return $scope.message = "Enter a valid 10-digit phone number";
+        if (!date) return $scope.message = "Please select a journey date";
+
+        const token = localStorage.getItem("token");
+        const logid = localStorage.getItem("logid");
+
+        if (!token) return $scope.message = "User not authenticated. Please login again.";
+        if (!logid) return $scope.message = "Invalid user ID. Login again.";
+
+        // Payment confirm — replaced alert with custom message
+        const confirmPay = confirm("Pay the amount " + price + " rupees?");
+        if (!confirmPay) {
+            showCopyMessage("Payment cancelled","failed");
+            window.location.href = '/train-ticket';
+            return;
+        }
+
+        const pay = parseInt(prompt("Pay the amount: " + price + " rupees"));
+        if (pay !== parseInt(price)) {
+            showCopyMessage("Payment failed : Entered Amount is not equal to ticket price.","failed");
+            return;
+        }
+
+        const payload = {
+            logid: logid,
+            source: ss,
+            destination: ds,
+            passengers: tnop,
+            amount: price,
+            phoneno: phoneno,
+            date: date
+        };
+
+        try {
+            const res = await fetch("/booktrain", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await res.json();
+
+            if (res.ok) {
+                alert("Train Ticket booked successfully");
+                showCopyMessage("Ticket booked successfully\nRedirecting to booking history...","success");
+                setTimeout(() => window.location.href = "/booking-history",1200);
+            } else {
+                showCopyMessage("Booking Failed: " + result.message ,"failed");
+                window.location.href = '/train-ticket';
+            }
+
+        } catch (err) {
+            showCopyMessage(" Error : "+err,"failed");
+            window.location.href = '/train-ticket';
+        }
+    };
+});
+      
         
