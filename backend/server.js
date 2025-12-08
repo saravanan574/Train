@@ -213,8 +213,8 @@ app.post("/booktrain", verifyToken,async (req, res) => {
 });
 const getIST = () => {
   const date = new Date();
-  const offset = 5.5*60*60*1000;
-  return new Date(date+offset);
+  const offset = 5.5 * 60 * 60 * 1000;
+  return new Date(date.getTime() + offset);
 }
 // BOOK PLATFORM TICKET
 app.post("/booking_platform",verifyToken, async(req, res) => {

@@ -206,7 +206,6 @@ function copyText(text) {
 
 function showCopyMessage(msg, type) {
     const box = document.getElementById("copyMsg");
-    alert(box);
     box.innerText = msg;
     if (type === "success") {
         box.style.background = "#d4eddb";
@@ -240,7 +239,7 @@ const deleteTicket = async (id, type) => {
 
     // CANCEL BUTTON
     document.getElementById("cancelDelete").onclick = () => {
-        pop.innerHTML = "";   // Close popup
+        pop.innerHTML = "";  
     };
 
     // CONFIRM BUTTON
@@ -267,7 +266,7 @@ const deleteTicket = async (id, type) => {
             showCopyMessage("Error: " + err, "failed");
         }
 
-        pop.innerHTML = "";  // Close popup after deleting
+        pop.innerHTML = "";  
     };
 }
 

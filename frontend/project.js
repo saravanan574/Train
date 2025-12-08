@@ -259,7 +259,6 @@ function showCopyMessage(msg, type) {
     const box = document.getElementById("copyMsg");
 
     box.innerText = msg;
-
     if (type === "success") {
         box.style.background = "#d4edda";
         box.style.color = "#155724";
@@ -275,7 +274,7 @@ function showCopyMessage(msg, type) {
     // Hide after 2 seconds
     setTimeout(() => {
         box.style.display = "none";
-    }, 2000);
+    }, 3000);
 }
 
 app.controller("train_ticket", ($scope, $http, $timeout) => {
